@@ -1,5 +1,6 @@
 ---
 import { getSiteUrls } from "@www/theme/src/urls";
+import "../styles/global.css";
 
 const urls = getSiteUrls(import.meta.env.DEV);
 const title = "Harsh Mittal";
@@ -13,7 +14,6 @@ const description = "Personal site";
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/src/styles/global.css" />
   </head>
   <body class="bg-neutral-950 text-neutral-100 min-h-screen flex items-center justify-center font-mono">
     <main class="max-w-xl px-6 text-center">
