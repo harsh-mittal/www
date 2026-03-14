@@ -1,0 +1,69 @@
+---
+import type { CollectionEntry } from "astro:content";
+import SocialList from "@/components/SocialList.astro";
+import { getAllNotes, getNoteTopic } from "@/data/garden";
+import PageLayout from "@/layouts/Base.astro";
+import { collectionDateSort } from "@/utils/date";
+
+const allNotes = await getAllNotes();
+const allNotesByDate = allNotes.sort(collectionDateSort) as CollectionEntry<"garden">[];
+
+const recentNotes = allNotesByDate.slice(0, 10);
+
+const topics = [...new Set(allNotes.map((n) => getNoteTopic(n)))].sort();
+---
+
+<PageLayout meta={{ title: "HM" }}>
+	<section>
+		<h1 class="title mb-6">Notes</h1>
+		<p class="mb-4">
+			A digital garden of learnings, thoughts, and ideas. Notes here range from seedlings to
+			evergreen — they grow and connect over time.
+		</p>
+		<SocialList />
+	</section>
+	<section class="mt-16">
+		<h2 class="title text-accent mb-6 text-xl">Recent</h2>
+		<ul class="space-y-4" role="list">
+			{
+				recentNotes.map((note) => (
+					<li class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+						<time
+							class="text-muted min-w-[120px] text-sm"
+							datetime={note.data.publishDate.toISOString()}
+						>
+							{note.data.publishDate.toLocaleDateString("en-US", {
+								day: "numeric",
+								month: "short",
+								year: "numeric",
+							})}
+						</time>
+						<a class="cactus-link" href={`/${note.id}/`}>
+							{note.data.title}
+						</a>
+						<span class="text-muted text-xs">({note.data.stage})</span>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+	{
+		topics.length > 0 && (
+			<section class="mt-16">
+				<h2 class="title text-accent mb-6 text-xl">Topics</h2>
+				<ul class="flex flex-wrap gap-3" role="list">
+					{topics.map((topic) => {
+						const count = allNotes.filter((n) => getNoteTopic(n) === topic).length;
+						return (
+							<li>
+								<span class="cactus-link">
+									{topic} ({count})
+								</span>
+							</li>
+						);
+					})}
+				</ul>
+			</section>
+		)
+	}
+</PageLayout>

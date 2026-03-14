@@ -1,0 +1,28 @@
+---
+import { getSiteUrls } from "@www/theme/src/urls";
+
+const urls = getSiteUrls(import.meta.env.DEV);
+const title = "Harsh Mittal";
+const description = "Personal site";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body class="bg-neutral-950 text-neutral-100 min-h-screen flex items-center justify-center font-mono">
+    <main class="max-w-xl px-6 text-center">
+      <h1 class="text-3xl font-bold mb-4">{title}</h1>
+      <p class="text-neutral-400 mb-8">Coming soon.</p>
+      <nav class="flex gap-6 justify-center text-sm">
+        <a href={urls.notes} class="text-emerald-400 hover:underline">Notes</a>
+        <a href={urls.github} class="text-neutral-400 hover:text-neutral-200">GitHub</a>
+      </nav>
+    </main>
+  </body>
+</html>

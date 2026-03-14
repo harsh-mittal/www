@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.turbo/
+*.db
+
+.env
+.env.*
+.DS_Store

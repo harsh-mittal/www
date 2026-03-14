@@ -1,0 +1,34 @@
+name: OpenTimestamps
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "proofs/**"
+
+jobs:
+  timestamp:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install OTS client
+        run: |
+          pip install opentimestamps-client certifi
+          export SSL_CERT_FILE=$(python -c "import certifi; print(certifi.where())")
+
+      - name: Stamp commit hash
+        run: |
+          export SSL_CERT_FILE=$(python -c "import certifi; print(certifi.where())")
+          echo "${{ github.sha }}" | ots stamp -
+          mv stdin.ots proofs/${{ github.sha }}.ots
+
+      - name: Commit proof
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add proofs/
+          git commit -m "ots: anchor ${{ github.sha }} [skip ci]"
+          git push
