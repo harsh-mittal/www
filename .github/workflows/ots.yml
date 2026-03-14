@@ -22,8 +22,9 @@ jobs:
       - name: Stamp commit hash
         run: |
           export SSL_CERT_FILE=$(python -c "import certifi; print(certifi.where())")
-          echo "${{ github.sha }}" | ots stamp -
-          mv stdin.ots proofs/${{ github.sha }}.ots
+          echo "${{ github.sha }}" > /tmp/commit_hash.txt
+          ots stamp /tmp/commit_hash.txt
+          mv /tmp/commit_hash.txt.ots proofs/${{ github.sha }}.ots
 
       - name: Commit proof
         run: |
